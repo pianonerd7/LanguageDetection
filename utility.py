@@ -12,7 +12,7 @@ def process_training_line(line):
     language = line[:space_index]
 
     data = line[space_index + 1:]
-    print line[space_index+1:-4]
+    print line[space_index+1:]
     for index, char in enumerate(data):
         cur_4_gram = data[index:index + 4]
 
@@ -26,9 +26,8 @@ def process_training_line(line):
             language_model[cur_4_gram] = 1 + SMOOTHING_CONST
 
         print cur_4_gram
-        if index == len(data) -4:
-            break
+        #if index == len(data) -4:
+        #    break
 
-str = "malaysian hello hello world, this is a sample string that has no actual content"
-process_training_line(str)
+read_from_file("./TxtFiles/input.train.txt")
 print language_models
