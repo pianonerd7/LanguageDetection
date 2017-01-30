@@ -1,5 +1,6 @@
 
 language_models = dict()
+SMOOTHING_CONST = 1
 
 def read_from_file(in_file):
     for line in file(in_file):
@@ -15,25 +16,19 @@ def process_training_line(line):
     for index, char in enumerate(data):
         cur_4_gram = data[index:index + 4]
 
+        if language not in language_models:
+            language_models[language] = dict()
+        language_model = language_models[language]
 
         if cur_4_gram in language_model:
-            switch(language):
-                case "indonesian":
-                    language_model[cur_4_gram][0] = language_model[cur_4_gram][0] + 1
-                    #language_model.update({cur_4_gram:})
-                    break
-                case "malaysian":
-                    language_model[cur_4_gram][1] = language_model[cur_4_gram][1] + 1
-                    break
-                case "tamil":
-                    language_model[cur_4_gram][2] = language_model[cur_4_gram][2] + 1
-                    break
+            language_model[cur_4_gram] = language_model[cur_4_gram] + 1
         else:
-            language_model[cur_4_gram] = 
+            language_model[cur_4_gram] = 1 + SMOOTHING_CONST
 
         print cur_4_gram
         if index == len(data) -4:
             break
 
-str = "hello world, this is a sample string that has no actual content"
+str = "malaysian hello hello world, this is a sample string that has no actual content"
 process_training_line(str)
+print language_models
