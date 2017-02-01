@@ -22,17 +22,19 @@ def process_training_line(line):
 
         if cur_4_gram not in language_model:
             language_model[cur_4_gram] = dict()
-        if language not in language_model[cur_4_gram]:
-            language_model[cur_4_gram][language] = SMOOTHING_CONST + 1
+        cur_4_gram_dict = language_model[cur_4_gram]
+        if language not in cur_4_gram_dict:
+            cur_4_gram_dict[language] = SMOOTHING_CONST + 1
             language_count[language] += SMOOTHING_CONST + 1
         else:
-            language_model[cur_4_gram][language] += 1
+            cur_4_gram_dict[language] += 1
             language_count[language] += 1
 
 def convert_count_to_probability():
     for cur_4_gram in language_model:
-        for language in language_model[cur_4_gram]:
-            language_model[cur_4_gram][language] = language_model[cur_4_gram][language]/float(language_count[language])
+        cur_4_gram_dict = language_model[cur_4_gram]
+        for language in cur_4_gram_dict:
+            cur_4_gram_dict[language] = cur_4_gram_dict[language]/float(language_count[language])
 
 read_from_file("./TxtFiles/input.train.txt")
 print language_model
