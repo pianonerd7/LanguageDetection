@@ -39,17 +39,33 @@ def convert_count_to_probability():
 def file_to_language_suggestion(in_file, out_file, LM):
     output_file = file('output-file', 'w')
     for line in file(in_file):
-        prediction = predict_language(line)
+        prediction = predict_language(line, LM)
         output_file.write(prediction)
 
-def predict_language(line):
+def predict_language(line, LM):
     language, data = get_language_and_data(line)
     #compute here
-    new_language = null
+    new_language = compute_probabilities_for_all_languages(line, LM)
     return new_language + " " + data #<-- should use stringbuilder instead? 
 
-def compute_probabilities():
-    return ""
+def compute_probabilities_for_all_languages(line, LM):
+    probabilities = dict()
+    all_grams = get_grams(line)
+
+    for gram in all_grams:
+        if gram in LM:
+            for language in LM[gram]:
+                if language not in probabilities:
+                    probabilities[language] = 0
+                probabilities[language] += math.log(LM[gram][language])
+    return get_largest_from_dict(probabilities)
+
+def get_largest_from_dict(probabilities):
+    highest_prob_language, highest_prob = "", 0
+    for langauge in probabilities:
+        if probabilities[langauge] > highest_prob:
+            highest_prob_language, highest_prob = langauge, highest_prob
+    return highest_prob_language
 
 # Returns the language of the string, and the string to extract n-gram from
 def get_language_and_data(line):
@@ -65,17 +81,3 @@ def get_grams(data):
     for index, char in enumerate(data):
         grams.append(data[index:index + GRAM_SIZE])
     return grams
-
-def sum_language_probability():
-    sum = dict()
-    sum["malaysian"] = 0
-    sum["tamil"] = 0
-    sum["indonesian"] = 0
-    for gram in language_model:
-        for language in language_model[gram]:
-            sum[language] += language_model[gram][language]
-    
-    print sum
-
-file_to_probability("./TxtFiles/input.train.txt")
-print sum_language_probability()
