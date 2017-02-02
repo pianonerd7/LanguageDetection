@@ -8,6 +8,7 @@ def file_to_probability(in_file):
     for line in file(in_file):
         process_training_line(line)
     convert_count_to_probability()
+    return language_model
 
 # <4gram, dict<language, probability>>
 def process_training_line(line):
@@ -17,7 +18,7 @@ def process_training_line(line):
         language_count[language] = 0
 
     all_grams = get_grams(data)
-    
+
     for gram in all_grams:
         if gram not in language_model:
             language_model[gram] = dict()
@@ -28,8 +29,6 @@ def process_training_line(line):
         else:
             cur_gram_dict[language] += 1
             language_count[language] += 1
-
-    return language_model, language_count
         
 def convert_count_to_probability():
     for cur_4_gram in language_model:
@@ -37,7 +36,7 @@ def convert_count_to_probability():
         for language in cur_4_gram_dict:
             cur_4_gram_dict[language] = cur_4_gram_dict[language]/float(language_count[language])
 
-def file_to_language_suggestion(in_file, out_file, LM)
+def file_to_language_suggestion(in_file, out_file, LM):
     output_file = file('output-file', 'w')
     for line in file(in_file):
         prediction = predict_language(line)
@@ -48,6 +47,9 @@ def predict_language(line):
     #compute here
     new_language = null
     return new_language + " " + data #<-- should use stringbuilder instead? 
+
+def compute_probabilities():
+    return ""
 
 # Returns the language of the string, and the string to extract n-gram from
 def get_language_and_data(line):
@@ -63,3 +65,17 @@ def get_grams(data):
     for index, char in enumerate(data):
         grams.append(data[index:index + GRAM_SIZE])
     return grams
+
+def sum_language_probability():
+    sum = dict()
+    sum["malaysian"] = 0
+    sum["tamil"] = 0
+    sum["indonesian"] = 0
+    for gram in language_model:
+        for language in language_model[gram]:
+            sum[language] += language_model[gram][language]
+    
+    print sum
+
+file_to_probability("./TxtFiles/input.train.txt")
+print sum_language_probability()
