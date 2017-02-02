@@ -42,13 +42,12 @@ def file_to_language_suggestion(in_file, out_file, LM):
     output_file = file(out_file, 'w')
     for line in file(in_file):
         print line.lower()
-        prediction = predict_language(line.lower(), LM)
+        prediction = predict_language(line, LM)
         output_file.write(prediction)
     output_file.close()
 
 def predict_language(line, LM):
-    #compute here
-    new_language = compute_probabilities_for_all_languages(line, LM)
+    new_language = compute_probabilities_for_all_languages(line.lower(), LM)
     print new_language + "\n\n"
     return new_language + " " + line #<-- should use stringbuilder instead? 
 
