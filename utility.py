@@ -4,6 +4,7 @@ language_model = dict()
 language_count = dict()
 SMOOTHING_CONST = 1
 GRAM_SIZE = 4
+OTHER_LANGUAGE_GRAM_SENTENCE_PERCENTAGE = 50
 
 def file_to_probability(in_file):
     for line in file(in_file):
@@ -55,15 +56,30 @@ def compute_probabilities_for_all_languages(line, LM):
     probabilities = dict()
     all_grams = get_grams(line)
 
+    non_trained_gram_count = 0
+
     for gram in all_grams:
         if gram in LM:
             for language in LM[gram]:
                 if language not in probabilities:
                     probabilities[language] = 0
                 probabilities[language] += LM[gram][language]
+        else:
+            non_trained_gram_count += 1
 
     print probabilities
+
+    if is_other_language(non_trained_gram_count, len(all_grams)):
+        return "other"
     return get_largest_from_dict(probabilities)
+
+def is_other_language(non_trained_count, total_gram_count):
+    val = (non_trained_count/float(total_gram_count))*100
+    print val
+    if val > OTHER_LANGUAGE_GRAM_SENTENCE_PERCENTAGE:
+        return True
+    else:
+        return False
 
 def get_largest_from_dict(probabilities):
     highest_prob_language, highest_prob = "", float(-1)
