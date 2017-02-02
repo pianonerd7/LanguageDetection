@@ -7,7 +7,7 @@ GRAM_SIZE = 4
 
 def file_to_probability(in_file):
     for line in file(in_file):
-        process_training_line(line)
+        process_training_line(line.lower())
     convert_count_to_probability()
     return language_model
 
@@ -40,12 +40,15 @@ def convert_count_to_probability():
 def file_to_language_suggestion(in_file, out_file, LM):
     output_file = file(out_file, 'w')
     for line in file(in_file):
-        prediction = predict_language(line, LM)
+        print line.lower()
+        prediction = predict_language(line.lower(), LM)
         output_file.write(prediction)
+    output_file.close()
 
 def predict_language(line, LM):
     #compute here
     new_language = compute_probabilities_for_all_languages(line, LM)
+    print new_language + "\n\n"
     return new_language + " " + line #<-- should use stringbuilder instead? 
 
 def compute_probabilities_for_all_languages(line, LM):
@@ -57,14 +60,16 @@ def compute_probabilities_for_all_languages(line, LM):
             for language in LM[gram]:
                 if language not in probabilities:
                     probabilities[language] = 0
-                probabilities[language] += math.log(LM[gram][language])
+                probabilities[language] += LM[gram][language]
+
+    print probabilities
     return get_largest_from_dict(probabilities)
 
 def get_largest_from_dict(probabilities):
-    highest_prob_language, highest_prob = "", 0
+    highest_prob_language, highest_prob = "", float(-1)
     for langauge in probabilities:
         if probabilities[langauge] > highest_prob:
-            highest_prob_language, highest_prob = langauge, highest_prob
+            highest_prob_language, highest_prob = langauge, probabilities[langauge]
     return highest_prob_language
 
 # Returns the language of the string, and the string to extract n-gram from
