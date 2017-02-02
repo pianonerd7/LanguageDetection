@@ -1,3 +1,4 @@
+import math 
 
 language_model = dict()
 language_count = dict()
@@ -37,16 +38,15 @@ def convert_count_to_probability():
             cur_4_gram_dict[language] = cur_4_gram_dict[language]/float(language_count[language])
 
 def file_to_language_suggestion(in_file, out_file, LM):
-    output_file = file('output-file', 'w')
+    output_file = file(out_file, 'w')
     for line in file(in_file):
         prediction = predict_language(line, LM)
         output_file.write(prediction)
 
 def predict_language(line, LM):
-    language, data = get_language_and_data(line)
     #compute here
     new_language = compute_probabilities_for_all_languages(line, LM)
-    return new_language + " " + data #<-- should use stringbuilder instead? 
+    return new_language + " " + line #<-- should use stringbuilder instead? 
 
 def compute_probabilities_for_all_languages(line, LM):
     probabilities = dict()
