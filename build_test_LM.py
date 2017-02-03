@@ -3,7 +3,7 @@ import re
 import nltk
 import sys
 import getopt
-import utility
+import language_model
 
 def build_LM(in_file):
     """
@@ -14,7 +14,7 @@ def build_LM(in_file):
     # This is an empty method
     # Pls implement your code in below
     
-    return utility.file_to_probability(in_file)
+    return language_model.file_to_probability(in_file)
 
 def test_LM(in_file, out_file, LM):
     """
@@ -26,7 +26,7 @@ def test_LM(in_file, out_file, LM):
     # This is an empty method
     # Pls implement your code in below
 
-    utility.file_to_language_suggestion(in_file, out_file, LM)
+    language_model.file_to_language_suggestion(in_file, out_file, LM)
 
 def usage():
     print "usage: " + sys.argv[0] + " -b input-file-for-building-LM -t input-file-for-testing-LM -o output-file"
