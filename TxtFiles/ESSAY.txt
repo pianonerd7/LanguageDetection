@@ -4,6 +4,7 @@ Replace this file with the answers to the essay questions here.
 1. In the homework assignment, we are using character-based ngrams,
 i.e., the gram units are characters. Do you expect token-based ngram
 models to perform better?
+No. characters have a max of 27 choices, where as ngram can have infinite amount of choices
 
 2. What do you think will happen if we provided more data for each
 category for you to build the language models? What if we only

@@ -3,6 +3,7 @@ import re
 import nltk
 import sys
 import getopt
+import utility
 
 def build_LM(in_file):
     """
@@ -13,6 +14,8 @@ def build_LM(in_file):
     # This is an empty method
     # Pls implement your code in below
     
+    return utility.file_to_probability(in_file)
+
 def test_LM(in_file, out_file, LM):
     """
     test the language models on new strings
@@ -22,6 +25,8 @@ def test_LM(in_file, out_file, LM):
     print "testing language models..."
     # This is an empty method
     # Pls implement your code in below
+
+    utility.file_to_language_suggestion(in_file, out_file, LM)
 
 def usage():
     print "usage: " + sys.argv[0] + " -b input-file-for-building-LM -t input-file-for-testing-LM -o output-file"
