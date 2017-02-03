@@ -11,11 +11,6 @@ def file_to_probability(in_file):
     initialize_language_count()
     for line in file(in_file):
         process_training_line(line.lower())
-    print "\n\n starting........ \n" 
-    print language_count
-    convert_count_to_probability()
-    print "\n\n starting........ \n" 
-    print language_count
     return language_model
 
 # <4gram, dict<language, probability>>
@@ -48,14 +43,12 @@ def convert_count_to_probability():
 def file_to_language_suggestion(in_file, out_file, LM):
     output_file = file(out_file, 'w')
     for line in file(in_file):
-        print line.lower()
         prediction = predict_language(line, LM)
         output_file.write(prediction)
     output_file.close()
 
 def predict_language(line, LM):
     new_language = compute_probabilities_for_all_languages(line.lower(), LM)
-    print new_language + "\n\n"
     return new_language + " " + line #<-- should use stringbuilder instead? 
 
 def compute_probabilities_for_all_languages(line, LM):
@@ -76,15 +69,12 @@ def compute_probabilities_for_all_languages(line, LM):
         else:
             non_trained_gram_count += 1
 
-    print probabilities
-
     if is_other_language(non_trained_gram_count, len(all_grams)):
         return "other"
     return get_largest_from_dict(probabilities)
 
 def is_other_language(non_trained_count, total_gram_count):
     val = (non_trained_count/float(total_gram_count))*100
-    print val
     if val > OTHER_LANGUAGE_GRAM_SENTENCE_PERCENTAGE:
         return True
     else:
